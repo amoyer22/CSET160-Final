@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Test</title>
+    <link rel="stylesheet" href="../static/styles/tests_pages.css">
+</head>
+<body>
+    <div id="main-container">
+        <h1>Create a Test</h1>
+        <form>
+            <div id="sub-container">
+                <label for="test-name">Test name:</label>
+                <input type="text" id="test-name" name="test-name">
+
+                <ul id="questions-list">
+                    <li class="question">
+                        <label for="test-question">Question name:</label>
+                        <input type="text" id="test-question" name="test-question">
+                    </li>
+                    <li class="question">
+                        <label for="test-question">Question name:</label>
+                        <input type="text" id="test-question" name="test-question">
+                    </li>
+                    <li class="question">
+                        <label for="test-question">Question name:</label>
+                        <input type="text" id="test-question" name="test-question">
+                    </li>
+                </ul>
+            </div>
+
+            <div id="buttons-container">
+                <button type="button" onclick="window.location.href='/tests'">Create Test</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

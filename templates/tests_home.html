@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../static/styles/style.css">
+    <title>Tests Home</title>
+    <link rel="stylesheet" href="../static/styles/tests_pages.css">
 </head>
 <body>
     <div id="main-container">
         <h1>Welcome, name!</h1>
-        <div id="tests-container">
+        <div id="sub-container">
             <h2>Tests</h2>
             <ul id="tests-list">
-                <li id="test">
+                <li class="test">
                     <h3>Test name</h3>
                     <ul>
                         <p>Created by: teachername</p>
                         <p># students have taken this test.</p>
                     </ul>
                 </li>
-                <li id="test">
+                <li class="test">
                     <h3>Test name</h3>
                     <ul>
                         <p>Created by: teachername</p>
@@ -30,9 +30,9 @@
         </div>
 
         <div id="buttons-container">
-            <button>Create a test</button>
-            <button>Edit a test</button>
-            <button>Delete a test</button>
+            <a href="/tests/create">Create a test</a>
+            <a href="">Edit a test</a>
+            <a href="">Delete a test</a>
         </div>
     </div>
 </body>

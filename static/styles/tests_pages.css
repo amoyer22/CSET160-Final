@@ -1,0 +1,50 @@
+/* All tests pages */
+#main-container{
+    margin: auto;
+    width: 50%;
+}
+#main-container h1{
+    margin: 0;
+    text-align: center;
+}
+#sub-container{
+    padding: 10px;
+    background-color: #a7a7a7;
+}
+#sub-container h2{
+    margin: 0;
+    text-align: center;
+}
+#buttons-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: auto;
+    width: 40%;
+}
+
+/* Tests home page */
+#tests-list{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.test{
+    background-color: #d3d3d3;
+}
+.test h3{
+    margin: 0;
+}
+.test p{
+    margin: 0;
+}
+
+/* Tests create page */
+#questions-list{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.question{
+    margin: 0;
+}
