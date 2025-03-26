@@ -4,27 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="main-container">
         <h1>Welcome, name!</h1>
-        <div id="tests-container" style="background-color: #a7a7a7;">
+        <div id="tests-container">
             <h2>Tests</h2>
-            <ul>
-                <li id="test" style="background-color: #d3d3d3;">
+            <ul id="tests-list">
+                <li id="test">
                     <h3>Test name</h3>
-                    <p>Created by: teachername</p>
-                    <p># students have taken this test.</p>
+                    <ul>
+                        <p>Created by: teachername</p>
+                        <p># students have taken this test.</p>
+                    </ul>
                 </li>
-                <li id="test" style="background-color: #d3d3d3;">
+                <li id="test">
                     <h3>Test name</h3>
-                    <p>Created by: teachername</p>
-                    <p># students have taken this test.</p>
+                    <ul>
+                        <p>Created by: teachername</p>
+                        <p># students have taken this test.</p>
+                    </ul>
                 </li>
             </ul>
         </div>
 
-        <div>
+        <div id="buttons-container">
             <button>Create a test</button>
             <button>Edit a test</button>
             <button>Delete a test</button>
