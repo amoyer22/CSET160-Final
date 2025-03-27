@@ -10,13 +10,17 @@ conn = engine.connect()
 def index():
     return render_template('index.html')
 
+@app.route('/home/teachers')
+def teacherhome():
+    return render_template('teacher_home.html')
+
+@app.route('/home/students')
+def studenthome():
+    return render_template('student_home.html')
+
 @app.route('/accounts')
 def accounts():
     return render_template('acc.html')
-
-@app.route('/home')
-def home():
-    return render_template('home.html')
 
 @app.route('/tests')
 def testshome():
