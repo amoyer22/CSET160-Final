@@ -7,8 +7,16 @@ engine = create_engine(conn_str)
 conn = engine.connect()
 
 @app.route('/')
-def home():
+def index():
     return render_template('index.html')
+
+@app.route('/accounts')
+def accounts():
+    return render_template('acc.html')
+
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
 @app.route('/tests')
 def testshome():
