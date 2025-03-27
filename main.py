@@ -20,7 +20,8 @@ def studenthome():
 
 @app.route('/accounts')
 def accounts():
-    return render_template('acc.html')
+    result = conn.execute(text("SELECT * FROM users")).all()
+    return render_template('acc.html', users=result)
 
 @app.route('/tests')
 def testshome():
