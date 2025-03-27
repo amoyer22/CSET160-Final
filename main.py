@@ -15,11 +15,11 @@ def testscreate():
     return render_template('tests_create.html')
 
 @app.route('/tests/edit')
-def testscreate():
+def testsedit():
     return render_template('tests_edit.html')
 
 @app.route('/tests/delete')
-def testscreate():
+def testsdelete():
     return render_template('tests_delete.html')
 
 if __name__ == '__main__':
