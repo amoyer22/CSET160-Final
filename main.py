@@ -10,6 +10,10 @@ conn = engine.connect()
 def index():
     return render_template('index.html')
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
 @app.route('/home/teachers')
 def teacherhome():
     return render_template('teacher_home.html')
