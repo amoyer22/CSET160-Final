@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit a Test</title>
+    <!-- <link rel="stylesheet" href="../static/styles/tests_pages.css"> -->
+</head>
+<body>
+    <h1>ONLINE TEST MANAGEMENT</h1>
+
+    <button onclick="window.history.back()">Back</button>
+    <button>Submit Grade</button>
+    <p>Total Grade: --/--</p>
+    <label for="student">Student:</label>
+    <select name="student" id="student">
+        <option value=" "> </option>
+        <option value="student1">Student 1</option>
+        <option value="student2">Student 2</option>
+    </select>
+
+    <h2>TEST NAME</h2>
+    <form>
+        <ul>
+            <li>Question name</li>
+            <li>Student answer</li>
+            <li>
+                <label for="grade">Score:</label>
+                <input type="number" id="grade" name="grade" min="-999" max="999"> / --
+            </li>
+            <br>
+
+            <li>Question name</li>
+            <li>Student answer</li>
+            <li>
+                <label for="grade">Score:</label>
+                <input type="number" id="grade" name="grade" min="-999" max="999"> / --
+            </li>
+            <br>
+        </ul>
+    </form>
+</body>
+</html>

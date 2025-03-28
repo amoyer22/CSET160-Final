@@ -47,10 +47,6 @@ def signup():
             message = "ERROR: Sign up failed. Try again."
     return render_template('signup.html', message=message)
 
-@app.route('/home/teachers')
-def teacherhome():
-    return render_template('teacher_home.html')
-
 @app.route('/home/students')
 def studenthome():
     return render_template('student_home.html')
@@ -66,6 +62,10 @@ def studentaccounts():
         result = conn.execute(text("SELECT * FROM users")).all()
     return render_template('student_accs.html', users=result)
 
+@app.route('/home/teachers')
+def teacherhome():
+    return render_template('teacher_home.html')
+
 @app.route('/home/teachers/accounts')
 def teacheraccounts():
     user_type = request.args.get('type', 'all')
@@ -77,13 +77,21 @@ def teacheraccounts():
         result = conn.execute(text("SELECT * FROM users")).all()
     return render_template('teacher_accs.html', users=result)
 
+@app.route('/tests/take')
+def teststake():
+    return render_template('tests_take.html')
+
 @app.route('/tests/create')
 def testscreate():
     return render_template('tests_create.html')
 
-@app.route('/tests/take')
-def teststake():
-    return render_template('tests_take.html')
+@app.route('/tests/edit')
+def testsedit():
+    return render_template('tests_edit.html')
+
+@app.route('/tests/grade')
+def testsgrade():
+    return render_template('tests_grade.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

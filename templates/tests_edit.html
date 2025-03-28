@@ -3,36 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a Test</title>
+    <title>Edit a Test</title>
     <!-- <link rel="stylesheet" href="../static/styles/tests_pages.css"> -->
 </head>
 <body>
     <h1>ONLINE TEST MANAGEMENT</h1>
 
     <button onclick="window.history.back()">Back</button>
-    <button>Add Question</button>
-    <button>Create Test</button>
+    <button>Save Changes</button>
 
-    <h2>CREATE NEW TEST</h2>
+    <h2>TEST NAME</h2>
     <form>
         <label for="test-name">Test Name:</label>
         <input type="text" id="test-name" name="test-name">
         <br><br>
 
-        <button>Delete</button>
-        <label for="test-question-1">Question:</label>
+        <label for="test-question-1">Question 1:</label>
         <input type="text" id="test-question-1" name="test-question-1">
         
         <label for="test-points-1">No. of Points:</label>
-        <input type="number" id="test-points-1" name="test-points-1" min="0" max="999" maxlength="3">
+        <input type="number" id="test-points-1" name="test-points-1" min="-999" max="999" maxlength="3">
         <br>
 
-        <button>Delete</button>
-        <label for="test-question-2">Question:</label>
+
+        <label for="test-question-2">Question 2:</label>
         <input type="text" id="test-question-2" name="test-question-2">
 
         <label for="test-points-2">No. of Points:</label>
-        <input type="number" id="test-points-2" name="test-points-2" min="0" max="999" maxlength="3">
+        <input type="number" id="test-points-2" name="test-points-2" min="-999" max="999" maxlength="3">
         <br>
     </form>
 </body>
