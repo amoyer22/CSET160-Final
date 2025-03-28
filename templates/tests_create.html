@@ -4,10 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create a Test</title>
-    <link rel="stylesheet" href="../static/styles/tests_pages.css">
+    <!-- <link rel="stylesheet" href="../static/styles/tests_pages.css"> -->
 </head>
 <body>
-    <div id="main-container">
+    <h1>ONLINE TEST MANAGEMENT</h1>
+
+    <button onclick="window.history.back()">Back</button>
+    <button>Create Test</button>
+
+    <h2>CREATE NEW TEST</h2>
+    <form>
+        <label for="test-name">Test Name:</label>
+        <input type="text" id="test-name" name="test-name">
+        <br><br>
+
+        <label for="test-question-1">Question 1:</label>
+        <input type="text" id="test-question-1" name="test-question-1">
+        
+        <label for="test-points-1">No. of Points:</label>
+        <input type="number" id="test-points-1" name="test-points-1" min="0" max="999" maxlength="3">
+        <br>
+
+
+        <label for="test-question-2">Question 2:</label>
+        <input type="text" id="test-question-2" name="test-question-2">
+
+        <label for="test-points-2">No. of Points:</label>
+        <input type="number" id="test-points-2" name="test-points-2" min="0" max="999" maxlength="3">
+        <br>
+    </form>
+
+    <!-- <div id="main-container">
         <h1>Create a Test</h1>
         <form>
             <div id="sub-container">
@@ -29,6 +56,6 @@
                 <button type="submit">Create Test</button>
             </div>
         </form>
-    </div>
+    </div> -->
 </body>
 </html>
