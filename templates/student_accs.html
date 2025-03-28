@@ -9,14 +9,14 @@
 <body>
     <h1>ONLINE TEST MANAGEMENT</h1>
     
-    <button onclick="window.history.back()">Back</button>
+    <button onclick="location.href='/home/students'">Back</button>
 
     <h2>ACCOUNTS</h2>
 
     <div>
-        <button>Show All</button>
-        <button>Show Students</button>
-        <button>Show Teachers</button>
+        <button onclick="location.href='/home/students/accounts?type=all'">Show All</button>
+        <button onclick="location.href='/home/students/accounts?type=students'">Show Students</button>
+        <button onclick="location.href='/home/students/accounts?type=teachers'">Show Teachers</button>
     </div>
 
     <table>

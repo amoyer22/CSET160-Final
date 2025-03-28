@@ -55,10 +55,27 @@ def teacherhome():
 def studenthome():
     return render_template('student_home.html')
 
-@app.route('/accounts')
-def accounts():
-    result = conn.execute(text("SELECT * FROM users")).all()
-    return render_template('acc.html', users=result)
+@app.route('/home/students/accounts')
+def studentaccounts():
+    user_type = request.args.get('type', 'all')
+    if user_type == 'students':
+        result = conn.execute(text("SELECT * FROM users WHERE type='student'")).all()
+    elif user_type == 'teachers':
+        result = conn.execute(text("SELECT * FROM users WHERE type='teacher'")).all()
+    else:
+        result = conn.execute(text("SELECT * FROM users")).all()
+    return render_template('student_accs.html', users=result)
+
+@app.route('/home/teachers/accounts')
+def teacheraccounts():
+    user_type = request.args.get('type', 'all')
+    if user_type == 'students':
+        result = conn.execute(text("SELECT * FROM users WHERE type='student'")).all()
+    elif user_type == 'teachers':
+        result = conn.execute(text("SELECT * FROM users WHERE type='teacher'")).all()
+    else:
+        result = conn.execute(text("SELECT * FROM users")).all()
+    return render_template('teacher_accs.html', users=result)
 
 @app.route('/tests/create')
 def testscreate():

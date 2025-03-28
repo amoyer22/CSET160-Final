@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="../static/styles/acc.css"> -->
+    <title>Accounts</title>
+</head>
+<body>
+    <h1>ONLINE TEST MANAGEMENT</h1>
+    
+    <button onclick="location.href='/home/teachers'">Back</button>
+
+    <h2>ACCOUNTS</h2>
+
+    <div>
+        <button onclick="location.href='/home/teachers/accounts?type=all'">Show All</button>
+        <button onclick="location.href='/home/teachers/accounts?type=students'">Show Students</button>
+        <button onclick="location.href='/home/teachers/accounts?type=teachers'">Show Teachers</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.type }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
