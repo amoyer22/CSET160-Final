@@ -64,5 +64,9 @@ def accounts():
 def testscreate():
     return render_template('tests_create.html')
 
+@app.route('/tests/take')
+def teststake():
+    return render_template('tests_take.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
