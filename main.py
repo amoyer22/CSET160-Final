@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from sqlalchemy import create_engine, text
 
 app = Flask(__name__)
@@ -10,9 +10,35 @@ conn = engine.connect()
 def index():
     return render_template('index.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        result = conn.execute(text("SELECT * FROM users WHERE username = :username AND password = :password"),
+                              {"username": username, "password": password}).first()
+        user_type = result[3]
+        if result:
+            if user_type == 'teacher':
+                return redirect('/home/teachers')
+            elif user_type == 'student':
+                return redirect('/home/students')
+        else:
+            return "Invalid entry. Try again."
     return render_template('login.html')
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user_type = request.form['type']
+        conn.execute(text("INSERT INTO users (username, password, type) VALUES (:username, :password, :type)"),
+                     {"username": username, "password": password, "type": user_type})
+        conn.commit()
+        return "Sign-up successful."
+    return render_template('signup.html')
 
 @app.route('/home/teachers')
 def teacherhome():
