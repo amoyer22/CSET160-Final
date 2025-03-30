@@ -4,34 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit a Test</title>
-    <!-- <link rel="stylesheet" href="../static/styles/tests_pages.css"> -->
 </head>
 <body>
     <h1>ONLINE TEST MANAGEMENT</h1>
 
-    <button onclick="window.history.back()">Back</button>
-    <button>Save Changes</button>
+    <button onclick="location.href='/home/teachers'">Back</button>
 
-    <h2>TEST NAME</h2>
-    <form>
+    <h2>Edit Test</h2>
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <form method="POST" action="/tests/edit?id={{test.id}}">
         <label for="test-name">Test Name:</label>
-        <input type="text" id="test-name" name="test-name">
+        <input type="text" id="test-name" name="test_name" value="{{ test.name }}" required>
         <br><br>
 
-        <label for="test-question-1">Question 1:</label>
-        <input type="text" id="test-question-1" name="test-question-1">
-        
-        <label for="test-points-1">No. of Points:</label>
-        <input type="number" id="test-points-1" name="test-points-1" min="-999" max="999" maxlength="3">
+        <div id="questions-container">
+            {% for question in questions %}
+            <div class="question" id="question-{{ question.id }}-container">
+                <label for="question-{{ question.id }}">Question:</label>
+                <input type="text" id="question-{{ question.id }}" name="questions[]" value="{{ question.question_text }}" required>
+                <label for="points-{{ question.id }}">Points:</label>
+                <input type="number" id="points-{{ question.id }}" name="points[]" value="{{ question.points }}" min="0" required>
+                <button type="button" onclick="deleteQuestion('question-{{ question.id }}-container')">Delete</button>
+            </div>
+            {% endfor %}
+        </div>
         <br>
-
-
-        <label for="test-question-2">Question 2:</label>
-        <input type="text" id="test-question-2" name="test-question-2">
-
-        <label for="test-points-2">No. of Points:</label>
-        <input type="number" id="test-points-2" name="test-points-2" min="-999" max="999" maxlength="3">
-        <br>
+        <button type="button" onclick="addQuestion()">Add Question</button>
+        <br><br>
+        <button type="submit">Save Changes</button>
     </form>
+
+    <script>
+        let questionCount = `{{questions|length}}`;
+
+        function addQuestion(){
+            questionCount++
+            const container = document.getElementById('questions-container')
+            const questionDiv = document.createElement('div')
+            questionDiv.classList.add('question')
+            questionDiv.id = `question-${questionCount}-container`
+            questionDiv.innerHTML = `
+                <label for="question-${questionCount}">Question:</label>
+                <input type="text" id="question-${questionCount}" name="questions[]" required>
+                <label for="points-${questionCount}">Points:</label>
+                <input type="number" id="points-${questionCount}" name="points[]" min="0" required>
+                <button type="button" onclick="deleteQuestion('question-${questionCount}-container')">Delete</button>
+            `
+            container.appendChild(questionDiv)
+        }
+
+        function deleteQuestion(questionId){
+            const questionDiv = document.getElementById(questionId)
+            if(questionDiv){
+                questionDiv.remove()
+            }
+        }
+    </script>
 </body>
 </html>

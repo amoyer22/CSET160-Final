@@ -119,9 +119,28 @@ def testscreate():
             message = "ERROR: Could not create test."
     return render_template('tests_create.html', message=message, username=username)
 
-@app.route('/tests/edit')
+@app.route('/tests/edit', methods=['GET', 'POST'])
 def testsedit():
-    return render_template('tests_edit.html')
+    test_id = request.args.get('id')
+    message = None
+    if request.method == 'POST':
+        test_name = request.form['test_name']
+        questions = request.form.getlist('questions[]')
+        points = request.form.getlist('points[]')
+        try:
+            conn.execute(text("UPDATE tests SET name = :name WHERE id = :id"),
+                         {"name": test_name, "id": test_id})
+            conn.execute(text("DELETE FROM questions WHERE test_id = :test_id"), {"test_id": test_id})
+            for question, point in zip(questions, points):
+                conn.execute(text("INSERT INTO questions (test_id, question_text, points) VALUES (:test_id, :question_text, :points)"),
+                             {"test_id": test_id, "question_text": question, "points": point})
+            conn.commit()
+            message = "Test updated successfully."
+        except:
+            message = "ERROR: Could not update test."
+    test = conn.execute(text("SELECT * FROM tests WHERE id = :id"), {"id": test_id}).first()
+    questions = conn.execute(text("SELECT * FROM questions WHERE test_id = :test_id"), {"test_id": test_id}).all()
+    return render_template('tests_edit.html', test=test, questions=questions, message=message)
 
 @app.route('/tests/grade')
 def testsgrade():
