@@ -19,12 +19,12 @@ def login():
         try:
             result = conn.execute(text("SELECT * FROM users WHERE username = :username AND password = :password"),
                                 {"username": username, "password": password}).first()
-            user_type = result[3]
             if result:
+                user_type = result[3]
                 if user_type == 'teacher':
-                    return redirect('/home/teachers')
+                    return redirect(f'/home/teachers?username={username}')
                 elif user_type == 'student':
-                    return redirect('/home/students')
+                    return redirect(f'/home/students?username={username}')
             else:
                 message = "ERROR: Invalid entry. Try again."
         except:
@@ -63,10 +63,17 @@ def studentaccounts():
         result = conn.execute(text("SELECT * FROM users")).all()
     return render_template('student_accs.html', users=result)
 
-@app.route('/home/teachers')
+@app.route('/home/teachers', methods=['GET', 'POST'])
 def teacherhome():
+    if request.method == 'POST':
+        test_id = request.form.get('delete_test_id')
+        if test_id:
+            conn.execute(text("DELETE FROM questions WHERE test_id = :test_id"), {"test_id": test_id})
+            conn.execute(text("DELETE FROM tests WHERE id = :id"), {"id": test_id})
+            conn.commit()
+    username = request.args.get('username')
     tests = conn.execute(text("SELECT * FROM tests")).all()
-    return render_template('teacher_home.html', tests=tests)
+    return render_template('teacher_home.html', tests=tests, username=username)
 
 @app.route('/home/teachers/accounts')
 def teacheraccounts():
@@ -89,23 +96,28 @@ def teststake():
 @app.route('/tests/create', methods=['GET', 'POST'])
 def testscreate():
     message = None
+    username = request.args.get('username')
     if request.method == 'POST':
         test_name = request.form['test_name']
+        creator = request.form['creator']
         questions = request.form.getlist('questions[]')
         points = request.form.getlist('points[]')
         try:
-            result = conn.execute(text("INSERT INTO tests (name, creator) VALUES (:name, :creator)"),
-                                  {"name": test_name, "creator": "teacher1"})
-            test_id = result.lastrowid
-
-            for question, point in zip(questions, points):
-                conn.execute(text("INSERT INTO questions (test_id, question_text, points) VALUES (:test_id, :question_text, :points)"),
-                             {"test_id": test_id, "question_text": question, "points": point})
-            conn.commit()
-            message = "Test created successfully."
+            existing_test = conn.execute(text("SELECT * FROM tests WHERE name = :name"), {"name": test_name}).first()
+            if existing_test:
+                message = "ERROR: A test with this name already exists."
+            else:
+                result = conn.execute(text("INSERT INTO tests (name, creator) VALUES (:name, :creator)"),
+                                    {"name": test_name, "creator": creator})
+                test_id = result.lastrowid
+                for question, point in zip(questions, points):
+                    conn.execute(text("INSERT INTO questions (test_id, question_text, points) VALUES (:test_id, :question_text, :points)"),
+                                {"test_id": test_id, "question_text": question, "points": point})
+                conn.commit()
+                message = "Test created successfully."
         except:
             message = "ERROR: Could not create test."
-    return render_template('tests_create.html', message=message)
+    return render_template('tests_create.html', message=message, username=username)
 
 @app.route('/tests/edit')
 def testsedit():
