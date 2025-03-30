@@ -17,28 +17,19 @@
     <h2>TESTS</h2>
 
     <ul>
+        {% for test in tests %}
         <li>
-            <h3>Test name</h3>
+            <h3>{{test.test_name}}</h3>
             <ul>
                 <p>Your grade: --/--</p>
-                <p>Created by: teachername</p>
+                <p>Created by: {{test.creator}}</p>
                 <p>0 students have taken this test.</p>
                 <div>
-                    <button onclick="location.href='/tests/take'">Take Test</button>
+                    <button onclick="location.href='/tests/take?id={{test.test_id}}'">Take Test</button>
                 </div>
             </ul>
         </li>
-        <li>
-            <h3>Test name</h3>
-            <ul>
-                <p>Your grade: --/--</p>
-                <p>Created by: teachername</p>
-                <p>0 students have taken this test.</p>
-                <div>
-                    <button onclick="location.href='/tests/take'">Take Test</button>
-                </div>
-            </ul>
-        </li>
+        {% endfor %}
     </ul>
 
 </body>

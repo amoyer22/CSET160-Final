@@ -49,7 +49,8 @@ def signup():
 
 @app.route('/home/students')
 def studenthome():
-    return render_template('student_home.html')
+    tests = conn.execute(text("SELECT * FROM tests")).all()
+    return render_template('student_home.html', tests=tests)
 
 @app.route('/home/students/accounts')
 def studentaccounts():
@@ -64,7 +65,8 @@ def studentaccounts():
 
 @app.route('/home/teachers')
 def teacherhome():
-    return render_template('teacher_home.html')
+    tests = conn.execute(text("SELECT * FROM tests")).all()
+    return render_template('teacher_home.html', tests=tests)
 
 @app.route('/home/teachers/accounts')
 def teacheraccounts():
