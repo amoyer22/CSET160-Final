@@ -29,6 +29,10 @@
                 </div>
             </ul>
         </li>
+        {% else %}
+        {% if tests|length == 0 %}
+            <p>No tests to display.</p>
+        {% endif %}
         {% endfor %}
     </ul>
 
