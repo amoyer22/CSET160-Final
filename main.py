@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect
 from sqlalchemy import create_engine, text
 
 app = Flask(__name__)
-conn_str = "mysql://root:cset155@localhost/testsdb"
+conn_str = "mysql://root:cset155@localhost/tests"
 engine = create_engine(conn_str)
 conn = engine.connect()
 
@@ -81,11 +81,31 @@ def teacheraccounts():
 
 @app.route('/tests/take')
 def teststake():
-    return render_template('tests_take.html')
+    test_id = request.args.get('id')
+    test = conn.execute(text("SELECT * FROM tests WHERE id = :id"), {"id": test_id}).all()
+    questions = conn.execute(text("SELECT * FROM questions WHERE test_id = :test_id"), {"test_id": test_id}).all()
+    return render_template('tests_take.html', test=test, questions=questions)
 
-@app.route('/tests/create')
+@app.route('/tests/create', methods=['GET', 'POST'])
 def testscreate():
-    return render_template('tests_create.html')
+    message = None
+    if request.method == 'POST':
+        test_name = request.form['test_name']
+        questions = request.form.getlist('questions[]')
+        points = request.form.getlist('points[]')
+        try:
+            result = conn.execute(text("INSERT INTO tests (name, creator) VALUES (:name, :creator)"),
+                                  {"name": test_name, "creator": "teacher1"})
+            test_id = result.lastrowid
+
+            for question, point in zip(questions, points):
+                conn.execute(text("INSERT INTO questions (test_id, question_text, points) VALUES (:test_id, :question_text, :points)"),
+                             {"test_id": test_id, "question_text": question, "points": point})
+            conn.commit()
+            message = "Test created successfully."
+        except:
+            message = "ERROR: Could not create test."
+    return render_template('tests_create.html', message=message)
 
 @app.route('/tests/edit')
 def testsedit():
