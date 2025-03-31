@@ -23,9 +23,9 @@
             {% for question in questions %}
             <div class="question" id="question-{{ question.id }}-container">
                 <label for="question-{{ question.id }}">Question:</label>
-                <input type="text" id="question-{{ question.id }}" name="questions[]" value="{{ question.question_text }}" required>
+                <input type="text" id="question-{{ question.id }}" name="questions[]" autocomplete="off" value="{{ question.question_text }}" required>
                 <label for="points-{{ question.id }}">Points:</label>
-                <input type="number" id="points-{{ question.id }}" name="points[]" value="{{ question.points }}" min="0" required>
+                <input type="number" id="points-{{ question.id }}" name="points[]" autocomplete="off" value="{{ question.points }}" min="0" required>
                 <button type="button" onclick="deleteQuestion('question-{{ question.id }}-container')">Delete</button>
             </div>
             {% endfor %}
@@ -47,9 +47,9 @@
             questionDiv.id = `question-${questionCount}-container`
             questionDiv.innerHTML = `
                 <label for="question-${questionCount}">Question:</label>
-                <input type="text" id="question-${questionCount}" name="questions[]" required>
+                <input type="text" id="question-${questionCount}" name="questions[]" autocomplete="off" value="{{ question.question_text }}" required>
                 <label for="points-${questionCount}">Points:</label>
-                <input type="number" id="points-${questionCount}" name="points[]" min="0" required>
+                <input type="number" id="points-${questionCount}" name="points[]" autocomplete="off" value="{{ question.question_text }}" min="0" required>
                 <button type="button" onclick="deleteQuestion('question-${questionCount}-container')">Delete</button>
             `
             container.appendChild(questionDiv)

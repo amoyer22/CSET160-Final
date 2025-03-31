@@ -16,7 +16,7 @@
         {% for question in questions %}
         <div>
             <p>{{ question.question_text }} ({{ question.points }} points)</p>
-            <textarea name="answers[{{ question.id }}]" rows="3" cols="50"></textarea>
+            <textarea name="answers[{{ question.id }}]" rows="3" cols="50" autocomplete="off"></textarea>
         </div>
         <br>
         {% endfor %}
