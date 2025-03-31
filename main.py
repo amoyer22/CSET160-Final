@@ -55,7 +55,9 @@ def studenthome():
     tests = conn.execute(text("""
         SELECT t.*, 
                (SELECT COUNT(*) FROM test_attempts WHERE test_attempts.test_id = t.id) AS student_count,
-               EXISTS (SELECT 1 FROM test_attempts WHERE test_attempts.test_id = t.id AND test_attempts.student_id = :student_id) AS has_taken
+               EXISTS (SELECT 1 FROM test_attempts WHERE test_attempts.test_id = t.id AND test_attempts.student_id = :student_id) AS has_taken,
+               (SELECT COALESCE(SUM(a.grade), 0) FROM answers a WHERE a.test_id = t.id AND a.student_id = :student_id) AS total_grade,
+               (SELECT COALESCE(SUM(q.points), 0) FROM questions q WHERE q.test_id = t.id) AS max_points
         FROM tests t
     """), {"student_id": student_id}).all()
     return render_template('student_home.html', tests=tests, student_id=student_id, message=message)

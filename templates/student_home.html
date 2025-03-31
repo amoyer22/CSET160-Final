@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="../static/styles/home.css"> -->
     <title>Student Home</title>
 </head>
 <body>
@@ -21,8 +20,12 @@
         <li>
             <h3>{{ test.name }}</h3>
             <ul>
-                <p>Your grade: --/--</p>
-                <p>Created by: {{ test.creator }}</p>
+                {% if test.has_taken %}
+                    <p>Your grade: {{ test.total_grade }}/{{ test.max_points }}</p>
+                {% else %}
+                    <p style="color: gray;">Your grade: --/--</p>
+                {% endif %}
+                    <p>Created by: {{ test.creator }}</p>
                 <p>{{ test.student_count }} students have taken this test.</p>
             </ul>
             <div>
