@@ -11,7 +11,8 @@
     <button onclick="location.href='/home/students'">Back</button>
 
     <h2>{{ test.name }}</h2>
-    <form method="POST" action="/tests/submit">
+    <form method="POST" action="/tests/submit?student_id={{ student_id }}">
+        <input type="hidden" name="test_id" value="{{ test[0].id }}">
         {% for question in questions %}
         <div>
             <p>{{ question.question_text }} ({{ question.points }} points)</p>

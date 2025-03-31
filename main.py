@@ -21,10 +21,11 @@ def login():
                                 {"username": username, "password": password}).first()
             if result:
                 user_type = result[3]
+                student_id = result[0]
                 if user_type == 'teacher':
                     return redirect(f'/home/teachers?username={username}')
                 elif user_type == 'student':
-                    return redirect(f'/home/students?username={username}')
+                    return redirect(f'/home/students?student_id={student_id}')
             else:
                 message = "ERROR: Invalid entry. Try again."
         except:
@@ -49,8 +50,9 @@ def signup():
 
 @app.route('/home/students')
 def studenthome():
+    student_id = request.args.get('student_id')
     tests = conn.execute(text("SELECT * FROM tests")).all()
-    return render_template('student_home.html', tests=tests)
+    return render_template('student_home.html', tests=tests, student_id=student_id)
 
 @app.route('/home/students/accounts')
 def studentaccounts():
@@ -89,9 +91,30 @@ def teacheraccounts():
 @app.route('/tests/take')
 def teststake():
     test_id = request.args.get('id')
+    student_id = request.args.get('student_id')
     test = conn.execute(text("SELECT * FROM tests WHERE id = :id"), {"id": test_id}).all()
     questions = conn.execute(text("SELECT * FROM questions WHERE test_id = :test_id"), {"test_id": test_id}).all()
-    return render_template('tests_take.html', test=test, questions=questions)
+    return render_template('tests_take.html', test=test, questions=questions, student_id=student_id)
+
+@app.route('/tests/submit', methods=['POST'])
+def testssubmit():
+    test_id = request.form.get('test_id')
+    student_id = request.args.get('student_id')
+    answers = request.form.to_dict(flat=False)
+    if not test_id or not student_id:
+        return "ERROR: Missing test_id or student_id."
+    try:
+        for question_id, answer_text in answers.items():
+            if question_id.startswith("answers["):
+                question_id = question_id[8:-1]
+                conn.execute(
+                    text("INSERT INTO answers (test_id, question_id, student_id, answer_text) VALUES (:test_id, :question_id, :student_id, :answer_text)"),
+                    {"test_id": int(test_id), "question_id": int(question_id), "student_id": int(student_id), "answer_text": answer_text[0]}
+                )
+        conn.commit()
+        return redirect('/home/students')
+    except:
+        return f"ERROR: Could not submit answers."
 
 @app.route('/tests/create', methods=['GET', 'POST'])
 def testscreate():
