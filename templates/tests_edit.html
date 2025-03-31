@@ -47,9 +47,9 @@
             questionDiv.id = `question-${questionCount}-container`
             questionDiv.innerHTML = `
                 <label for="question-${questionCount}">Question:</label>
-                <input type="text" id="question-${questionCount}" name="questions[]" autocomplete="off" value="{{ question.question_text }}" required>
+                <input type="text" id="question-${questionCount}" name="questions[]" autocomplete="off" required>
                 <label for="points-${questionCount}">Points:</label>
-                <input type="number" id="points-${questionCount}" name="points[]" autocomplete="off" value="{{ question.question_text }}" min="0" required>
+                <input type="number" id="points-${questionCount}" name="points[]" autocomplete="off" min="0" required>
                 <button type="button" onclick="deleteQuestion('question-${questionCount}-container')">Delete</button>
             `
             container.appendChild(questionDiv)
