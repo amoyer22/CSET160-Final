@@ -33,7 +33,7 @@
                 <td>{{ user.type }}</td>
                 <td>
                     {% if user.type == 'student' %}
-                        <button onclick="location.href='/home/students/accounts?student_id={{ user.id }}'">All Grades</button>
+                        <button onclick="location.href='/home/teachers/accounts?student_id={{ user.id }}'">All Grades</button>
                     {% else %}
                         <button disabled>All Grades</button>
                     {% endif %}
