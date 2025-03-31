@@ -184,9 +184,33 @@ def testsedit():
     questions = conn.execute(text("SELECT * FROM questions WHERE test_id = :test_id"), {"test_id": test_id}).all()
     return render_template('tests_edit.html', test=test, questions=questions, message=message)
 
-@app.route('/tests/grade')
+@app.route('/tests/grade', methods=['GET', 'POST'])
 def testsgrade():
-    return render_template('tests_grade.html')
+    test_id = request.args.get('id')
+    if request.method == 'POST':
+        student_id = request.form.get('student_id')
+        grades = request.form.to_dict(flat=False)
+        try:
+            for question_id, grade in grades.items():
+                if question_id.startswith("grade["):
+                    question_id = question_id[6:-1]
+                    conn.execute(
+                        text("UPDATE answers SET grade = :grade WHERE test_id = :test_id AND question_id = :question_id AND student_id = :student_id"),
+                        {"grade": grade[0], "test_id": test_id, "question_id": question_id, "student_id": student_id}
+                    )
+            conn.commit()
+            return redirect(f'/tests/grade?id={test_id}')
+        except:
+            return "ERROR: Could not submit grades."
+    students = conn.execute(text("""
+        SELECT DISTINCT users.id, users.username FROM users JOIN test_attempts ON users.id = test_attempts.student_id WHERE test_attempts.test_id = :test_id"""),
+            {"test_id": test_id}).all()
+    student_id = request.args.get('student_id')
+    questions = []
+    if student_id:
+        questions = conn.execute(text("""SELECT q.id AS question_id, q.question_text, q.points, a.answer_text, a.grade FROM questions q LEFT JOIN answers a ON q.id = a.question_id AND a.student_id = :student_id WHERE q.test_id = :test_id"""),
+                                 {"test_id": test_id, "student_id": student_id}).all()
+    return render_template('tests_grade.html', students=students, questions=questions, test_id=test_id, student_id=student_id)
 
 if __name__ == '__main__':
     app.run(debug=True)
