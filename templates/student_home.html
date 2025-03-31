@@ -19,14 +19,18 @@
     <ul>
         {% for test in tests %}
         <li>
-            <h3>{{test.name}}</h3>
+            <h3>{{ test.name }}</h3>
             <ul>
                 <p>Your grade: --/--</p>
-                <p>Created by: {{test.creator}}</p>
-                <p>0 students have taken this test.</p>
+                <p>Created by: {{ test.creator }}</p>
+                <p>{{ test.student_count }} students have taken this test.</p>
             </ul>
             <div>
-                <button onclick="location.href='/tests/take?id={{ test.id }}&student_id={{ student_id }}'">Take Test</button>
+                {% if test.has_taken %}
+                    <button disabled>Take Test</button>
+                {% else %}
+                    <button onclick="location.href='/tests/take?id={{ test.id }}&student_id={{ student_id }}'">Take Test</button>
+                {% endif %}
             </div>
         </li>
         {% else %}

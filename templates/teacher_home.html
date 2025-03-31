@@ -22,8 +22,8 @@
         <li>
             <h3>{{ test.name }}</h3>
             <ul>
-                <p>Created by: {{test.creator}}</p>
-                <p>0 students have taken this test.</p>
+                <p>Created by: {{ test.creator }}</p>
+                <p>{{ test.student_count }} students have taken this test.</p>
             </ul>
             <div>
                 <button onclick="location.href='/tests/grade?id={{test.id}}'">Enter Grades</button>

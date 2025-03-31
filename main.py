@@ -51,8 +51,14 @@ def signup():
 @app.route('/home/students')
 def studenthome():
     student_id = request.args.get('student_id')
-    tests = conn.execute(text("SELECT * FROM tests")).all()
-    return render_template('student_home.html', tests=tests, student_id=student_id)
+    message = request.args.get('message')
+    tests = conn.execute(text("""
+        SELECT t.*, 
+               (SELECT COUNT(*) FROM test_attempts WHERE test_attempts.test_id = t.id) AS student_count,
+               EXISTS (SELECT 1 FROM test_attempts WHERE test_attempts.test_id = t.id AND test_attempts.student_id = :student_id) AS has_taken
+        FROM tests t
+    """), {"student_id": student_id}).all()
+    return render_template('student_home.html', tests=tests, student_id=student_id, message=message)
 
 @app.route('/home/students/accounts')
 def studentaccounts():
@@ -74,7 +80,11 @@ def teacherhome():
             conn.execute(text("DELETE FROM tests WHERE id = :id"), {"id": test_id})
             conn.commit()
     username = request.args.get('username')
-    tests = conn.execute(text("SELECT * FROM tests")).all()
+    tests = conn.execute(text("""
+        SELECT t.*, 
+               (SELECT COUNT(*) FROM test_attempts WHERE test_attempts.test_id = t.id) AS student_count
+        FROM tests t
+    """)).all()
     return render_template('teacher_home.html', tests=tests, username=username)
 
 @app.route('/home/teachers/accounts')
@@ -92,6 +102,11 @@ def teacheraccounts():
 def teststake():
     test_id = request.args.get('id')
     student_id = request.args.get('student_id')
+    has_taken = conn.execute(text("""
+        SELECT 1 FROM test_attempts WHERE test_id = :test_id AND student_id = :student_id
+    """), {"test_id": test_id, "student_id": student_id}).first()
+    if has_taken:
+        return redirect(f'/home/students?student_id={student_id}&message=already_taken')
     test = conn.execute(text("SELECT * FROM tests WHERE id = :id"), {"id": test_id}).all()
     questions = conn.execute(text("SELECT * FROM questions WHERE test_id = :test_id"), {"test_id": test_id}).all()
     return render_template('tests_take.html', test=test, questions=questions, student_id=student_id)
@@ -111,10 +126,14 @@ def testssubmit():
                     text("INSERT INTO answers (test_id, question_id, student_id, answer_text) VALUES (:test_id, :question_id, :student_id, :answer_text)"),
                     {"test_id": int(test_id), "question_id": int(question_id), "student_id": int(student_id), "answer_text": answer_text[0]}
                 )
+        conn.execute(
+            text("INSERT INTO test_attempts (test_id, student_id) VALUES (:test_id, :student_id)"),
+            {"test_id": int(test_id), "student_id": int(student_id)}
+        )
         conn.commit()
         return redirect('/home/students')
     except:
-        return f"ERROR: Could not submit answers."
+        return "ERROR: Could not submit answers."
 
 @app.route('/tests/create', methods=['GET', 'POST'])
 def testscreate():
