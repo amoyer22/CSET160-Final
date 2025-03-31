@@ -21,7 +21,10 @@
         {% for test in tests %}
         <li>
             <h3>{{ test.name }}</h3>
-            <p>Created by: {{ test.creator }}</p>
+            <ul>
+                <p>Created by: {{test.creator}}</p>
+                <p>0 students have taken this test.</p>
+            </ul>
             <div>
                 <button onclick="location.href='/tests/grade?id={{test.id}}'">Enter Grades</button>
                 <button onclick="location.href='/tests/edit?id={{test.id}}'">Edit Test</button>
