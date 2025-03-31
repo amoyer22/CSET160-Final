@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="../static/styles/acc.css"> -->
     <title>Accounts</title>
 </head>
 <body>
     <h1>ONLINE TEST MANAGEMENT</h1>
-    
+
     <button onclick="location.href='/home/teachers'">Back</button>
 
     <h2>ACCOUNTS</h2>
@@ -23,7 +22,8 @@
         <thead>
             <tr>
                 <th>Username</th>
-                <th>Role</th>
+                <th>Type</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -31,10 +31,54 @@
             <tr>
                 <td>{{ user.username }}</td>
                 <td>{{ user.type }}</td>
+                <td>
+                    {% if user.type == 'student' %}
+                        <button onclick="location.href='/home/students/accounts?student_id={{ user.id }}'">All Grades</button>
+                    {% else %}
+                        <button disabled>All Grades</button>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
+    {% if grades %}
+    <h2>{{ selected_student_username.title() }} Grades:</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Test Name</th>
+                <th>Grade</th>
+                <th>Graded By</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grade in grades %}
+            <tr>
+                <td>{{ grade.test_name }}</td>
+                <td>
+                    {% if grade.has_taken %}
+                        {{ grade.total_grade }}/{{ grade.max_points }}
+                    {% else %}
+                        --/--
+                    {% endif %}
+                </td>
+                <td>
+                    <p> </p>
+                </td>
+                <td>
+                    {% if grade.has_taken %}
+                        Taken
+                    {% else %}
+                        Not Taken
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
 </body>
 </html>

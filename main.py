@@ -65,13 +65,27 @@ def studenthome():
 @app.route('/home/students/accounts')
 def studentaccounts():
     user_type = request.args.get('type', 'all')
+    student_id = request.args.get('student_id')
+    grades = None
+    student_username = None
+    if student_id:
+        grades = conn.execute(text("""
+            SELECT t.id AS test_id, t.name AS test_name, 
+                   (SELECT COALESCE(SUM(a.grade), 0) FROM answers a WHERE a.test_id = t.id AND a.student_id = :student_id) AS total_grade,
+                   (SELECT COALESCE(SUM(q.points), 0) FROM questions q WHERE q.test_id = t.id) AS max_points,
+                   EXISTS (SELECT 1 FROM test_attempts WHERE test_attempts.test_id = t.id AND test_attempts.student_id = :student_id) AS has_taken
+            FROM tests t
+        """), {"student_id": student_id}).all()
+        student = conn.execute(text("SELECT username FROM users WHERE id = :student_id"), {"student_id": student_id}).first()
+        if student:
+            student_username = student.username
     if user_type == 'students':
         result = conn.execute(text("SELECT * FROM users WHERE type='student'")).all()
     elif user_type == 'teachers':
         result = conn.execute(text("SELECT * FROM users WHERE type='teacher'")).all()
     else:
         result = conn.execute(text("SELECT * FROM users")).all()
-    return render_template('student_accs.html', users=result)
+    return render_template('student_accs.html', users=result, grades=grades, selected_student_username=student_username)
 
 @app.route('/home/teachers', methods=['GET', 'POST'])
 def teacherhome():
@@ -92,13 +106,27 @@ def teacherhome():
 @app.route('/home/teachers/accounts')
 def teacheraccounts():
     user_type = request.args.get('type', 'all')
+    student_id = request.args.get('student_id')
+    grades = None
+    student_username = None
+    if student_id:
+        grades = conn.execute(text("""
+            SELECT t.id AS test_id, t.name AS test_name, 
+                   (SELECT COALESCE(SUM(a.grade), 0) FROM answers a WHERE a.test_id = t.id AND a.student_id = :student_id) AS total_grade,
+                   (SELECT COALESCE(SUM(q.points), 0) FROM questions q WHERE q.test_id = t.id) AS max_points,
+                   EXISTS (SELECT 1 FROM test_attempts WHERE test_attempts.test_id = t.id AND test_attempts.student_id = :student_id) AS has_taken
+            FROM tests t
+        """), {"student_id": student_id}).all()
+        student = conn.execute(text("SELECT username FROM users WHERE id = :student_id"), {"student_id": student_id}).first()
+        if student:
+            student_username = student.username
     if user_type == 'students':
         result = conn.execute(text("SELECT * FROM users WHERE type='student'")).all()
     elif user_type == 'teachers':
         result = conn.execute(text("SELECT * FROM users WHERE type='teacher'")).all()
     else:
         result = conn.execute(text("SELECT * FROM users")).all()
-    return render_template('teacher_accs.html', users=result)
+    return render_template('teacher_accs.html', users=result, grades=grades, selected_student_username=student_username)
 
 @app.route('/tests/take')
 def teststake():
