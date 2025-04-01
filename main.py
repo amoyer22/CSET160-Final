@@ -161,7 +161,7 @@ def testssubmit():
             {"test_id": int(test_id), "student_id": int(student_id)}
         )
         conn.commit()
-        return redirect('/home/students')
+        return redirect(f'/home/students?student_id={student_id}')
     except:
         return "ERROR: Could not submit answers."
 
