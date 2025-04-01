@@ -33,7 +33,7 @@
                 <td>{{ user.type }}</td>
                 <td>
                     {% if user.type == 'student' %}
-                        <button onclick="location.href='/home/students/accounts?student_id={{ user.id }}'">All Grades</button>
+                        <button onclick="location.href='/home/students/accounts?student_id={{ user.id }}&type={{ request.args.get('type', 'all') }}'">All Grades</button>
                     {% else %}
                         <button disabled>All Grades</button>
                     {% endif %}
@@ -50,7 +50,6 @@
             <tr>
                 <th>Test Name</th>
                 <th>Grade</th>
-                <th>Graded By</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -64,9 +63,6 @@
                     {% else %}
                         --/--
                     {% endif %}
-                </td>
-                <td>
-                    <p> </p>
                 </td>
                 <td>
                     {% if grade.has_taken %}
