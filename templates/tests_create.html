@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Test</title>
+</head>
+<body>
+    <h1>ONLINE TEST MANAGEMENT</h1>
+
+    <button onclick="location.href='/home/teachers?username={{ username }}'">Back</button>
+
+    <h2>CREATE NEW TEST</h2>
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <form method="POST" action="/tests/create">
+        <input type="hidden" name="username" value="{{ username }}">
+        <label for="test-name">Test Name:</label>
+        <input type="text" id="test-name" name="test_name" required>
+        <input type="hidden" name="creator" value="{{ username }}">
+        <br><br>
+
+        <div id="questions-container">
+            <div class="question" id="question-1-container">
+                <label for="question-1">Question:</label>
+                <input type="text" id="question-1" name="questions[]" autocomplete="off" required>
+                <label for="points-1">Points:</label>
+                <input type="number" id="points-1" name="points[]" autocomplete="off" min="0" required>
+                <button type="button" onclick="deleteQuestion('question-1-container')">Delete</button>
+            </div>
+        </div>
+        <br>
+        <button type="button" onclick="addQuestion()">Add Question</button>
+        <br><br>
+        <button type="submit">Create Test</button>
+    </form>
+
+    <script>
+        let questionCount = 1;
+    
+        function addQuestion() {
+            questionCount++;
+            const container = document.getElementById('questions-container');
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+            questionDiv.id = `question-${questionCount}-container`; // Assign a unique ID to the container
+            questionDiv.innerHTML = `
+                <label for="question-${questionCount}">Question:</label>
+                <input type="text" id="question-${questionCount}" name="questions[]" autocomplete="off" required>
+                <label for="points-${questionCount}">Points:</label>
+                <input type="number" id="points-${questionCount}" name="points[]" autocomplete="off" min="0" required>
+                <button type="button" onclick="deleteQuestion('question-${questionCount}-container')">Delete</button>
+            `;
+            container.appendChild(questionDiv);
+        }
+    
+        function deleteQuestion(questionId) {
+            const questionDiv = document.getElementById(questionId);
+            if (questionDiv) {
+                questionDiv.remove(); // Remove the question container from the DOM
+            }
+        }
+    </script>
+</body>
+</html>

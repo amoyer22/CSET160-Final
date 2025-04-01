@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/styles/login.css"/>
+    <title>Sign Up</title>
+  </head>
+  <body>
+    <div id="SignInPage" class="container">
+      
+      <h1>ONLINE TEST MANAGEMENT</h1>
+
+      {% if message %}
+        <p>{{message}}</p>
+      {% endif %}
+
+      <form method="POST" action="/signup">
+        <input type="text" name="username" placeholder="USERNAME" autocomplete="off" required>
+        <br>
+        <input type="password" name="password" placeholder="PASSWORD" autocomplete="off" required>
+        <br>
+        <select name="type" required>
+          <option value="student">Student</option>
+          <option value="teacher">Teacher</option>
+        </select>
+        <br>
+        <button type="submit">Sign Up</button>
+        <a href="/login">Or log in here</a>
+      </form>
+    
+    </div>
+    
+    <script src="script.py"></script>
+  </body>
+</html>

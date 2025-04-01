@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Home</title>
+</head>
+<body>
+    <h1>ONLINE TEST MANAGEMENT</h1>
+
+    <div>
+        <button onclick="location.href='/'">Log out</button>
+        <button onclick="location.href='/home/students/accounts'">Accounts</button>
+    </div>
+
+    <h2>TESTS</h2>
+
+    <ul>
+        {% for test in tests %}
+        <li>
+            <h3>{{ test.name }}</h3>
+            <ul>
+                {% if test.has_taken %}
+                    <p>Your grade: {{ test.total_grade }}/{{ test.max_points }}</p>
+                {% else %}
+                    <p style="color: gray;">Your grade: --/--</p>
+                {% endif %}
+                    <p>Created by: {{ test.creator }}</p>
+                <p>{{ test.student_count }} students have taken this test.</p>
+            </ul>
+            <div>
+                {% if test.has_taken %}
+                    <button disabled>Take Test</button>
+                {% else %}
+                    <button onclick="location.href='/tests/take?id={{ test.id }}&student_id={{ student_id }}'">Take Test</button>
+                {% endif %}
+            </div>
+        </li>
+        {% else %}
+        {% if tests|length == 0 %}
+            <p>No tests to display.</p>
+        {% endif %}
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Test</title>
+</head>
+<body>
+    <h1>ONLINE TEST MANAGEMENT</h1>
+
+    <button onclick="location.href='/home/students'">Back</button>
+
+    <h2>{{ test.name }}</h2>
+    <form method="POST" action="/tests/submit?student_id={{ student_id }}">
+        <input type="hidden" name="test_id" value="{{ test[0].id }}">
+        {% for question in questions %}
+        <div>
+            <p>{{ question.question_text }} ({{ question.points }} points)</p>
+            <textarea name="answers[{{ question.id }}]" rows="3" cols="50" autocomplete="off"></textarea>
+        </div>
+        <br>
+        {% endfor %}
+        <button type="submit">Submit Test</button>
+    </form>
+</body>
+</html>

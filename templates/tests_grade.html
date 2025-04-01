@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade a Test</title>
+</head>
+<body>
+    <h1>ONLINE TEST MANAGEMENT</h1>
+
+    <button onclick="location.href='/home/teachers'">Back</button>
+    
+    <form method="GET" action="/tests/grade">
+        <input type="hidden" name="id" value="{{ test_id }}">
+        <label for="student">Student:</label>
+        <select name="student_id" id="student" onchange="this.form.submit()">
+            <option value="">--</option>
+            {% for student in students %}
+                <option value="{{ student.id }}"
+                    {% if student.id == student_id %}
+                        selected
+                    {% endif %}>
+                {{ student.username }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if questions %}
+    <h2>Test Questions</h2>
+    <form method="POST" action="/tests/grade?id={{ test_id }}">
+        <input type="hidden" name="student_id" value="{{ student_id }}">
+        <ul>
+            {% for question in questions %}
+            <li>
+                <h3>{{ question.question_text }}</h3>
+                {% if question.answer_text%}
+                    <p><strong>A:</strong> {{ question.answer_text}}</p>
+                {% else %}
+                    <p><strong>A:</strong> <span style="color: gray;">No answer was provided.</span> </p>
+                {% endif %}
+                <label for="grade-{{ question.question_id }}">Grade:</label>
+                <input type="number" id="grade-{{ question.question_id }}" name="grade[{{ question.question_id }}]" value="{{ question.grade or '' }}" autocomplete="off" min="0" max="{{ question.points }}">
+                <p style="display: inline;">/ {{ question.points }} Points</p>
+            </li>
+            <br>
+            {% endfor %}
+        </ul>
+        <button type="submit">Submit Grades</button>
+    </form>
+    {% else %}
+        <p>Select a student to grade.</p>
+    {% endif %}
+</body>
+</html>
