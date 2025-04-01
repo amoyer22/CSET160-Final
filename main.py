@@ -168,10 +168,15 @@ def testssubmit():
 @app.route('/tests/create', methods=['GET', 'POST'])
 def testscreate():
     message = None
-    username = request.args.get('username')
+    if request.method == 'POST':
+        username = request.form.get('username')
+    else:
+        username = request.args.get('username')
+    if not username:
+        return redirect('/home/teachers?error=missing_username')
     if request.method == 'POST':
         test_name = request.form['test_name']
-        creator = request.form['creator']
+        creator = username
         questions = request.form.getlist('questions[]')
         points = request.form.getlist('points[]')
         try:
@@ -179,9 +184,9 @@ def testscreate():
             if existing_test:
                 message = "ERROR: A test with this name already exists."
             else:
-                result = conn.execute(text("INSERT INTO tests (name, creator) VALUES (:name, :creator)"),
-                                    {"name": test_name, "creator": creator})
-                test_id = result.lastrowid
+                conn.execute(text("INSERT INTO tests (name, creator) VALUES (:name, :creator)"),
+                             {"name": test_name, "creator": creator})
+                test_id = conn.execute(text("SELECT LAST_INSERT_ID()")).scalar()
                 for question, point in zip(questions, points):
                     conn.execute(text("INSERT INTO questions (test_id, question_text, points) VALUES (:test_id, :question_text, :points)"),
                                 {"test_id": test_id, "question_text": question, "points": point})

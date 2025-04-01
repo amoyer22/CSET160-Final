@@ -8,13 +8,14 @@
 <body>
     <h1>ONLINE TEST MANAGEMENT</h1>
 
-    <button onclick="location.href='/home/teachers'">Back</button>
+    <button onclick="location.href='/home/teachers?username={{ username }}'">Back</button>
 
     <h2>CREATE NEW TEST</h2>
     {% if message %}
         <p>{{ message }}</p>
     {% endif %}
     <form method="POST" action="/tests/create">
+        <input type="hidden" name="username" value="{{ username }}">
         <label for="test-name">Test Name:</label>
         <input type="text" id="test-name" name="test_name" required>
         <input type="hidden" name="creator" value="{{ username }}">
